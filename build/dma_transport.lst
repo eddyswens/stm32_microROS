@@ -1,0 +1,645 @@
+ARM GAS  /tmp/ccFgLu9Y.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"dma_transport.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.cubemx_transport_open,"ax",%progbits
+  20              		.align	1
+  21              		.global	cubemx_transport_open
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	cubemx_transport_open:
+  27              	.LVL0:
+  28              	.LFB137:
+  29              		.file 1 "micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c"
+   1:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <uxr/client/transport.h>
+   2:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+   3:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <rmw_microxrcedds_c/config.h>
+   4:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+   5:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include "main.h"
+   6:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include "cmsis_os.h"
+   7:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+   8:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <unistd.h>
+   9:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <stdio.h>
+  10:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <string.h>
+  11:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #include <stdbool.h>
+  12:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  13:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #ifdef RMW_UXRCE_TRANSPORT_CUSTOM
+  14:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  15:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** // --- micro-ROS Transports ---
+  16:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** #define UART_DMA_BUFFER_SIZE 2048
+  17:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  18:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** static uint8_t dma_buffer[UART_DMA_BUFFER_SIZE];
+  19:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** static size_t dma_head = 0, dma_tail = 0;
+  20:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  21:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** bool cubemx_transport_open(struct uxrCustomTransport * transport){
+  30              		.loc 1 21 66 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 21 66 is_stmt 0 view .LVU1
+  35 0000 08B5     		push	{r3, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccFgLu9Y.s 			page 2
+
+
+  38              		.cfi_offset 3, -8
+  39              		.cfi_offset 14, -4
+  22:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     UART_HandleTypeDef * uart = (UART_HandleTypeDef*) transport->args;
+  40              		.loc 1 22 5 is_stmt 1 view .LVU2
+  41              	.LVL1:
+  23:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     HAL_UART_Receive_DMA(uart, dma_buffer, UART_DMA_BUFFER_SIZE);
+  42              		.loc 1 23 5 view .LVU3
+  43 0002 4FF40062 		mov	r2, #2048
+  44 0006 0349     		ldr	r1, .L3
+  45 0008 D0F88C02 		ldr	r0, [r0, #652]
+  46              	.LVL2:
+  47              		.loc 1 23 5 is_stmt 0 view .LVU4
+  48 000c FFF7FEFF 		bl	HAL_UART_Receive_DMA
+  49              	.LVL3:
+  24:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     return true;
+  50              		.loc 1 24 5 is_stmt 1 view .LVU5
+  25:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** }
+  51              		.loc 1 25 1 is_stmt 0 view .LVU6
+  52 0010 0120     		movs	r0, #1
+  53 0012 08BD     		pop	{r3, pc}
+  54              	.L4:
+  55              		.align	2
+  56              	.L3:
+  57 0014 00000000 		.word	.LANCHOR0
+  58              		.cfi_endproc
+  59              	.LFE137:
+  61              		.section	.text.cubemx_transport_close,"ax",%progbits
+  62              		.align	1
+  63              		.global	cubemx_transport_close
+  64              		.syntax unified
+  65              		.thumb
+  66              		.thumb_func
+  68              	cubemx_transport_close:
+  69              	.LVL4:
+  70              	.LFB138:
+  26:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  27:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** bool cubemx_transport_close(struct uxrCustomTransport * transport){
+  71              		.loc 1 27 67 is_stmt 1 view -0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 0
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  75              		.loc 1 27 67 is_stmt 0 view .LVU8
+  76 0000 08B5     		push	{r3, lr}
+  77              	.LCFI1:
+  78              		.cfi_def_cfa_offset 8
+  79              		.cfi_offset 3, -8
+  80              		.cfi_offset 14, -4
+  28:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     UART_HandleTypeDef * uart = (UART_HandleTypeDef*) transport->args;
+  81              		.loc 1 28 5 is_stmt 1 view .LVU9
+  82              	.LVL5:
+  29:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     HAL_UART_DMAStop(uart);
+  83              		.loc 1 29 5 view .LVU10
+  84 0002 D0F88C02 		ldr	r0, [r0, #652]
+  85              	.LVL6:
+  86              		.loc 1 29 5 is_stmt 0 view .LVU11
+  87 0006 FFF7FEFF 		bl	HAL_UART_DMAStop
+  88              	.LVL7:
+ARM GAS  /tmp/ccFgLu9Y.s 			page 3
+
+
+  30:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     return true;
+  89              		.loc 1 30 5 is_stmt 1 view .LVU12
+  31:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** }
+  90              		.loc 1 31 1 is_stmt 0 view .LVU13
+  91 000a 0120     		movs	r0, #1
+  92 000c 08BD     		pop	{r3, pc}
+  93              		.cfi_endproc
+  94              	.LFE138:
+  96              		.section	.text.cubemx_transport_write,"ax",%progbits
+  97              		.align	1
+  98              		.global	cubemx_transport_write
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 103              	cubemx_transport_write:
+ 104              	.LVL8:
+ 105              	.LFB139:
+  32:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  33:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** size_t cubemx_transport_write(struct uxrCustomTransport* transport, uint8_t * buf, size_t len, uint
+ 106              		.loc 1 33 110 is_stmt 1 view -0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              		.loc 1 33 110 is_stmt 0 view .LVU15
+ 111 0000 70B5     		push	{r4, r5, r6, lr}
+ 112              	.LCFI2:
+ 113              		.cfi_def_cfa_offset 16
+ 114              		.cfi_offset 4, -16
+ 115              		.cfi_offset 5, -12
+ 116              		.cfi_offset 6, -8
+ 117              		.cfi_offset 14, -4
+  34:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     UART_HandleTypeDef * uart = (UART_HandleTypeDef*) transport->args;
+ 118              		.loc 1 34 5 is_stmt 1 view .LVU16
+ 119              		.loc 1 34 26 is_stmt 0 view .LVU17
+ 120 0002 D0F88C52 		ldr	r5, [r0, #652]
+ 121              	.LVL9:
+  35:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  36:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     HAL_StatusTypeDef ret;
+ 122              		.loc 1 36 5 is_stmt 1 view .LVU18
+  37:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     if (uart->gState == HAL_UART_STATE_READY){
+ 123              		.loc 1 37 5 view .LVU19
+ 124              		.loc 1 37 13 is_stmt 0 view .LVU20
+ 125 0006 95F83D30 		ldrb	r3, [r5, #61]	@ zero_extendqisi2
+ 126              	.LVL10:
+ 127              		.loc 1 37 13 view .LVU21
+ 128 000a DBB2     		uxtb	r3, r3
+ 129              		.loc 1 37 8 view .LVU22
+ 130 000c 202B     		cmp	r3, #32
+ 131 000e 01D0     		beq	.L16
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+  39:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         while (ret == HAL_OK && uart->gState != HAL_UART_STATE_READY){
+  40:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****             osDelay(1);
+  41:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         }
+  42:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  43:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         return (ret == HAL_OK) ? len : 0;
+  44:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }else{
+  45:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         return 0;
+ARM GAS  /tmp/ccFgLu9Y.s 			page 4
+
+
+ 132              		.loc 1 45 16 view .LVU23
+ 133 0010 0020     		movs	r0, #0
+ 134              	.LVL11:
+ 135              	.L7:
+  46:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }
+  47:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** }
+ 136              		.loc 1 47 1 view .LVU24
+ 137 0012 70BD     		pop	{r4, r5, r6, pc}
+ 138              	.LVL12:
+ 139              	.L16:
+ 140              		.loc 1 47 1 view .LVU25
+ 141 0014 1446     		mov	r4, r2
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+ 142              		.loc 1 38 9 is_stmt 1 view .LVU26
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+ 143              		.loc 1 38 15 is_stmt 0 view .LVU27
+ 144 0016 92B2     		uxth	r2, r2
+ 145              	.LVL13:
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+ 146              		.loc 1 38 15 view .LVU28
+ 147 0018 2846     		mov	r0, r5
+ 148              	.LVL14:
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+ 149              		.loc 1 38 15 view .LVU29
+ 150 001a FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 151              	.LVL15:
+  38:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ret = HAL_UART_Transmit_DMA(uart, buf, len);
+ 152              		.loc 1 38 15 view .LVU30
+ 153 001e 0646     		mov	r6, r0
+ 154              	.LVL16:
+  39:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****             osDelay(1);
+ 155              		.loc 1 39 9 is_stmt 1 view .LVU31
+ 156              	.L9:
+  39:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****             osDelay(1);
+ 157              		.loc 1 39 15 view .LVU32
+ 158 0020 46B9     		cbnz	r6, .L10
+  39:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****             osDelay(1);
+ 159              		.loc 1 39 37 is_stmt 0 discriminator 1 view .LVU33
+ 160 0022 95F83D30 		ldrb	r3, [r5, #61]	@ zero_extendqisi2
+ 161 0026 DBB2     		uxtb	r3, r3
+  39:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****             osDelay(1);
+ 162              		.loc 1 39 30 discriminator 1 view .LVU34
+ 163 0028 202B     		cmp	r3, #32
+ 164 002a 03D0     		beq	.L10
+  40:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         }
+ 165              		.loc 1 40 13 is_stmt 1 view .LVU35
+ 166 002c 0120     		movs	r0, #1
+ 167 002e FFF7FEFF 		bl	osDelay
+ 168              	.LVL17:
+ 169 0032 F5E7     		b	.L9
+ 170              	.L10:
+  43:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }else{
+ 171              		.loc 1 43 9 view .LVU36
+  43:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }else{
+ 172              		.loc 1 43 38 is_stmt 0 view .LVU37
+ 173 0034 0EB9     		cbnz	r6, .L14
+ 174 0036 2046     		mov	r0, r4
+ARM GAS  /tmp/ccFgLu9Y.s 			page 5
+
+
+ 175 0038 EBE7     		b	.L7
+ 176              	.L14:
+  43:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }else{
+ 177              		.loc 1 43 38 view .LVU38
+ 178 003a 0020     		movs	r0, #0
+ 179 003c E9E7     		b	.L7
+ 180              		.cfi_endproc
+ 181              	.LFE139:
+ 183              		.section	.text.cubemx_transport_read,"ax",%progbits
+ 184              		.align	1
+ 185              		.global	cubemx_transport_read
+ 186              		.syntax unified
+ 187              		.thumb
+ 188              		.thumb_func
+ 190              	cubemx_transport_read:
+ 191              	.LVL18:
+ 192              	.LFB140:
+  48:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  49:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** size_t cubemx_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int ti
+ 193              		.loc 1 49 120 is_stmt 1 view -0
+ 194              		.cfi_startproc
+ 195              		@ args = 4, pretend = 0, frame = 0
+ 196              		@ frame_needed = 0, uses_anonymous_args = 0
+ 197              		.loc 1 49 120 is_stmt 0 view .LVU40
+ 198 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 199              	.LCFI3:
+ 200              		.cfi_def_cfa_offset 32
+ 201              		.cfi_offset 3, -32
+ 202              		.cfi_offset 4, -28
+ 203              		.cfi_offset 5, -24
+ 204              		.cfi_offset 6, -20
+ 205              		.cfi_offset 7, -16
+ 206              		.cfi_offset 8, -12
+ 207              		.cfi_offset 9, -8
+ 208              		.cfi_offset 14, -4
+ 209 0004 0D46     		mov	r5, r1
+ 210 0006 1446     		mov	r4, r2
+ 211 0008 1F46     		mov	r7, r3
+  50:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     UART_HandleTypeDef * uart = (UART_HandleTypeDef*) transport->args;
+ 212              		.loc 1 50 5 is_stmt 1 view .LVU41
+ 213              		.loc 1 50 26 is_stmt 0 view .LVU42
+ 214 000a D0F88C82 		ldr	r8, [r0, #652]
+ 215              	.LVL19:
+  51:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** 
+  52:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     int ms_used = 0;
+ 216              		.loc 1 52 5 is_stmt 1 view .LVU43
+ 217              		.loc 1 52 9 is_stmt 0 view .LVU44
+ 218 000e 0026     		movs	r6, #0
+ 219              	.LVL20:
+ 220              	.L19:
+  53:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     do
+ 221              		.loc 1 53 5 is_stmt 1 discriminator 2 view .LVU45
+  54:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     {
+  55:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         __disable_irq();
+ 222              		.loc 1 55 9 discriminator 2 view .LVU46
+ 223              	.LBB6:
+ 224              	.LBI6:
+ARM GAS  /tmp/ccFgLu9Y.s 			page 6
+
+
+ 225              		.file 2 "Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V5.0.4
+   5:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     09. April 2018
+   6:Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:Drivers/CMSIS/Include/cmsis_gcc.h **** /*
+   8:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
+   9:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  10:Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  12:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+  14:Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  16:Drivers/CMSIS/Include/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  18:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:Drivers/CMSIS/Include/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:Drivers/CMSIS/Include/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:Drivers/CMSIS/Include/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:Drivers/CMSIS/Include/cmsis_gcc.h ****  * limitations under the License.
+  23:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  24:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  25:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  28:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  30:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  31:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
+  36:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  38:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  39:Drivers/CMSIS/Include/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ASM
+  41:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  43:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
+  44:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  46:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  49:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE                 
+  50:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
+  52:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
+  53:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  55:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __USED
+  56:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+ARM GAS  /tmp/ccFgLu9Y.s 			page 7
+
+
+  57:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  58:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __WEAK
+  59:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  61:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED
+  62:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  64:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  67:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  70:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+  71:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:Drivers/CMSIS/Include/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  78:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  82:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  86:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+  87:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  88:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  94:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 102:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 110:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 113:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __RESTRICT
+ARM GAS  /tmp/ccFgLu9Y.s 			page 8
+
+
+ 114:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 116:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 117:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 118:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+ 119:Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 120:Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+ 121:Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+ 122:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 123:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 124:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 125:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+ 126:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 127:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 128:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __enable_irq(void)
+ 130:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 132:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 133:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 134:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 135:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 136:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+ 137:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+ 138:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 139:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 140:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
+ 226              		.loc 2 140 27 discriminator 2 view .LVU47
+ 227              	.LBB7:
+ 141:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 142:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 228              		.loc 2 142 3 discriminator 2 view .LVU48
+ 229              		.syntax unified
+ 230              	@ 142 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 231 0010 72B6     		cpsid i
+ 232              	@ 0 "" 2
+ 233              		.thumb
+ 234              		.syntax unified
+ 235              	.LBE7:
+ 236              	.LBE6:
+  56:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         dma_tail = UART_DMA_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(uart->hdmarx);
+ 237              		.loc 1 56 9 discriminator 2 view .LVU49
+ 238              		.loc 1 56 43 is_stmt 0 discriminator 2 view .LVU50
+ 239 0012 D8F83830 		ldr	r3, [r8, #56]
+ 240 0016 1B68     		ldr	r3, [r3]
+ 241 0018 5868     		ldr	r0, [r3, #4]
+ 242              		.loc 1 56 41 discriminator 2 view .LVU51
+ 243 001a C0F50060 		rsb	r0, r0, #2048
+ 244              		.loc 1 56 18 discriminator 2 view .LVU52
+ 245 001e DFF85490 		ldr	r9, .L25+8
+ 246 0022 C9F80000 		str	r0, [r9]
+  57:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         __enable_irq();
+ 247              		.loc 1 57 9 is_stmt 1 discriminator 2 view .LVU53
+ 248              	.LBB8:
+ 249              	.LBI8:
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 250              		.loc 2 129 27 discriminator 2 view .LVU54
+ARM GAS  /tmp/ccFgLu9Y.s 			page 9
+
+
+ 251              	.LBB9:
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 252              		.loc 2 131 3 discriminator 2 view .LVU55
+ 253              		.syntax unified
+ 254              	@ 131 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 255 0026 62B6     		cpsie i
+ 256              	@ 0 "" 2
+ 257              		.thumb
+ 258              		.syntax unified
+ 259              	.LBE9:
+ 260              	.LBE8:
+  58:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         ms_used++;
+ 261              		.loc 1 58 9 discriminator 2 view .LVU56
+ 262              		.loc 1 58 16 is_stmt 0 discriminator 2 view .LVU57
+ 263 0028 0136     		adds	r6, r6, #1
+ 264              	.LVL21:
+  59:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         osDelay(portTICK_RATE_MS);
+ 265              		.loc 1 59 9 is_stmt 1 discriminator 2 view .LVU58
+ 266 002a 0120     		movs	r0, #1
+ 267 002c FFF7FEFF 		bl	osDelay
+ 268              	.LVL22:
+  60:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     } while (dma_head == dma_tail && ms_used < timeout);
+ 269              		.loc 1 60 13 discriminator 2 view .LVU59
+ 270              		.loc 1 60 23 is_stmt 0 discriminator 2 view .LVU60
+ 271 0030 0E4B     		ldr	r3, .L25
+ 272 0032 1B68     		ldr	r3, [r3]
+ 273 0034 D9F80020 		ldr	r2, [r9]
+ 274              		.loc 1 60 5 discriminator 2 view .LVU61
+ 275 0038 9342     		cmp	r3, r2
+ 276 003a 14D1     		bne	.L23
+ 277              		.loc 1 60 35 discriminator 1 view .LVU62
+ 278 003c BE42     		cmp	r6, r7
+ 279 003e E7DB     		blt	.L19
+ 280 0040 0020     		movs	r0, #0
+ 281 0042 08E0     		b	.L20
+ 282              	.LVL23:
+ 283              	.L22:
+  61:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     
+  62:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     size_t wrote = 0;
+  63:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     while ((dma_head != dma_tail) && (wrote < len)){
+  64:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         buf[wrote] = dma_buffer[dma_head];
+ 284              		.loc 1 64 9 is_stmt 1 view .LVU63
+ 285              		.loc 1 64 32 is_stmt 0 view .LVU64
+ 286 0044 0A49     		ldr	r1, .L25+4
+ 287 0046 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 288              		.loc 1 64 20 view .LVU65
+ 289 0048 2954     		strb	r1, [r5, r0]
+  65:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         dma_head = (dma_head + 1) % UART_DMA_BUFFER_SIZE;
+ 290              		.loc 1 65 9 is_stmt 1 view .LVU66
+ 291              		.loc 1 65 30 is_stmt 0 view .LVU67
+ 292 004a 0133     		adds	r3, r3, #1
+ 293              		.loc 1 65 35 view .LVU68
+ 294 004c C3F30A03 		ubfx	r3, r3, #0, #11
+ 295              		.loc 1 65 18 view .LVU69
+ 296 0050 0649     		ldr	r1, .L25
+ 297 0052 0B60     		str	r3, [r1]
+  66:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         wrote++;
+ARM GAS  /tmp/ccFgLu9Y.s 			page 10
+
+
+ 298              		.loc 1 66 9 is_stmt 1 view .LVU70
+ 299              		.loc 1 66 14 is_stmt 0 view .LVU71
+ 300 0054 0130     		adds	r0, r0, #1
+ 301              	.LVL24:
+ 302              	.L20:
+  63:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         buf[wrote] = dma_buffer[dma_head];
+ 303              		.loc 1 63 11 is_stmt 1 view .LVU72
+  63:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         buf[wrote] = dma_buffer[dma_head];
+ 304              		.loc 1 63 22 is_stmt 0 view .LVU73
+ 305 0056 054B     		ldr	r3, .L25
+ 306 0058 1B68     		ldr	r3, [r3]
+  63:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         buf[wrote] = dma_buffer[dma_head];
+ 307              		.loc 1 63 11 view .LVU74
+ 308 005a 9A42     		cmp	r2, r3
+ 309 005c 01D0     		beq	.L17
+  63:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****         buf[wrote] = dma_buffer[dma_head];
+ 310              		.loc 1 63 35 discriminator 1 view .LVU75
+ 311 005e A042     		cmp	r0, r4
+ 312 0060 F0D3     		bcc	.L22
+ 313              	.L17:
+  67:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     }
+  68:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     
+  69:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c ****     return wrote;
+  70:micro_ros_stm32cubemx_utils/extra_sources/microros_transports/dma_transport.c **** }
+ 314              		.loc 1 70 1 view .LVU76
+ 315 0062 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 316              	.LVL25:
+ 317              	.L23:
+ 318              		.loc 1 70 1 view .LVU77
+ 319 0066 0020     		movs	r0, #0
+ 320 0068 F5E7     		b	.L20
+ 321              	.L26:
+ 322 006a 00BF     		.align	2
+ 323              	.L25:
+ 324 006c 00000000 		.word	.LANCHOR2
+ 325 0070 00000000 		.word	.LANCHOR0
+ 326 0074 00000000 		.word	.LANCHOR1
+ 327              		.cfi_endproc
+ 328              	.LFE140:
+ 330              		.section	.bss.dma_buffer,"aw",%nobits
+ 331              		.align	2
+ 332              		.set	.LANCHOR0,. + 0
+ 335              	dma_buffer:
+ 336 0000 00000000 		.space	2048
+ 336      00000000 
+ 336      00000000 
+ 336      00000000 
+ 336      00000000 
+ 337              		.section	.bss.dma_head,"aw",%nobits
+ 338              		.align	2
+ 339              		.set	.LANCHOR2,. + 0
+ 342              	dma_head:
+ 343 0000 00000000 		.space	4
+ 344              		.section	.bss.dma_tail,"aw",%nobits
+ 345              		.align	2
+ 346              		.set	.LANCHOR1,. + 0
+ 349              	dma_tail:
+ARM GAS  /tmp/ccFgLu9Y.s 			page 11
+
+
+ 350 0000 00000000 		.space	4
+ 351              		.text
+ 352              	.Letext0:
+ 353              		.file 3 "/opt/st/stm32cubeide_1.12.1/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-
+ 354              		.file 4 "/opt/st/stm32cubeide_1.12.1/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-
+ 355              		.file 5 "/opt/st/stm32cubeide_1.12.1/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-
+ 356              		.file 6 "micro_ros_stm32cubemx_utils/microros_static_library/libmicroros/microros_include/uxr/clie
+ 357              		.file 7 "micro_ros_stm32cubemx_utils/microros_static_library/libmicroros/microros_include/uxr/clie
+ 358              		.file 8 "micro_ros_stm32cubemx_utils/microros_static_library/libmicroros/microros_include/uxr/clie
+ 359              		.file 9 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 360              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 361              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 362              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 363              		.file 13 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 364              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
+ARM GAS  /tmp/ccFgLu9Y.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 dma_transport.c
+     /tmp/ccFgLu9Y.s:20     .text.cubemx_transport_open:0000000000000000 $t
+     /tmp/ccFgLu9Y.s:26     .text.cubemx_transport_open:0000000000000000 cubemx_transport_open
+     /tmp/ccFgLu9Y.s:57     .text.cubemx_transport_open:0000000000000014 $d
+     /tmp/ccFgLu9Y.s:62     .text.cubemx_transport_close:0000000000000000 $t
+     /tmp/ccFgLu9Y.s:68     .text.cubemx_transport_close:0000000000000000 cubemx_transport_close
+     /tmp/ccFgLu9Y.s:97     .text.cubemx_transport_write:0000000000000000 $t
+     /tmp/ccFgLu9Y.s:103    .text.cubemx_transport_write:0000000000000000 cubemx_transport_write
+     /tmp/ccFgLu9Y.s:184    .text.cubemx_transport_read:0000000000000000 $t
+     /tmp/ccFgLu9Y.s:190    .text.cubemx_transport_read:0000000000000000 cubemx_transport_read
+     /tmp/ccFgLu9Y.s:324    .text.cubemx_transport_read:000000000000006c $d
+     /tmp/ccFgLu9Y.s:331    .bss.dma_buffer:0000000000000000 $d
+     /tmp/ccFgLu9Y.s:335    .bss.dma_buffer:0000000000000000 dma_buffer
+     /tmp/ccFgLu9Y.s:338    .bss.dma_head:0000000000000000 $d
+     /tmp/ccFgLu9Y.s:342    .bss.dma_head:0000000000000000 dma_head
+     /tmp/ccFgLu9Y.s:345    .bss.dma_tail:0000000000000000 $d
+     /tmp/ccFgLu9Y.s:349    .bss.dma_tail:0000000000000000 dma_tail
+
+UNDEFINED SYMBOLS
+HAL_UART_Receive_DMA
+HAL_UART_DMAStop
+HAL_UART_Transmit_DMA
+osDelay
